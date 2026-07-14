@@ -1,5 +1,5 @@
-import { FiTerminal, FiSmartphone, FiLink } from "react-icons/fi";
-import { BsRocket } from "react-icons/bs";
+import { FiTerminal, FiSmartphone, FiDatabase, FiLink } from "react-icons/fi";
+import { BsCpu, BsRocket } from "react-icons/bs";
 
 interface ServiceCardProps {
   title: string;
@@ -8,9 +8,11 @@ interface ServiceCardProps {
 
 const iconMap: Record<string, React.ReactNode> = {
   "Web Development": <FiTerminal />,
-  "Responsive Design": <FiSmartphone />,
+  "Mobile App Development": <FiSmartphone />,
+  "AI & Machine Learning": <BsCpu />,
+  "Database Design": <FiDatabase />,
   "API Development": <FiLink />,
-  "Deployment": <BsRocket />,
+  "DevOps & Deployment": <BsRocket />,
 };
 
 export default function ServiceCard({ title, description }: ServiceCardProps) {

@@ -1,10 +1,12 @@
 import ServiceCard from "@/components/Service-Card";
 
 const services = [
-  { title: "Web Development", description: "Full-stack web apps using React, Next.js, and .NET." },
-  { title: "Responsive Design", description: "Mobile-first interfaces that look great on any device." },
-  { title: "API Development", description: "RESTful APIs and backend services with Node.js or .NET." },
-  { title: "Deployment", description: "Docker containerization and cloud deployment." },
+  { title: "Web Development", description: "Full-stack web apps using React, Next.js, PHP, and Tailwind CSS." },
+  { title: "Mobile App Development", description: "Cross-platform mobile apps with React Native and real-time features." },
+  { title: "AI & Machine Learning", description: "Image classification and smart systems using YOLOv8, PyTorch, and TensorFlow." },
+  { title: "Database Design", description: "Structured data architecture with MySQL, MongoDB, Firebase, and SQLite." },
+  { title: "API Development", description: "RESTful APIs and backend services with PHP and Node.js." },
+  { title: "DevOps & Deployment", description: "Docker containerization, CI/CD pipelines, and cloud deployment via Vercel." },
 ];
 
 export default function Services() {
@@ -17,7 +19,7 @@ export default function Services() {
             <h2 className="font-bebas text-4xl text-white uppercase tracking-wider text-hierarchy-high">Services</h2>
             <span className="flex-1 h-[1px] bg-red-600/20" />
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {services.map((service, i) => (
               <div key={service.title} className="animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
                 <ServiceCard title={service.title} description={service.description} />
