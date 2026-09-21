@@ -34,6 +34,21 @@ const projects = [
     languages: ["PHP", "SQL", "JavaScript"],
     githubLink: "https://github.com/Jeydeee04/Student-Assistant-SPES-Project",
   },
+  {
+    images: ["kanban_2.jpg", "kanban_3.jpg", "kanban_1.jpg"],
+    title: "Kanban Board",
+    description: "This Kanban board is a modern task manager designed to help you easily organize workflows, track progress, and filter tasks. It includes smart filters, column pagination, and persistent dark and light modes for a smooth and productive experience.",
+    keyFeatures: [
+      "Organizes tasks across To Do, Doing, and Done columns with quick status transition capabilities.",
+      "Supports project metadata, interactive subtask checklists, and an inline editing modal for flexible task updates.",
+      "Provides instant keyword searching alongside dynamic dropdowns for priority, month, and day filters.",
+      "Limits columns to five items per page with responsive navigation controls to prevent long vertical scrolling.",
+      "Allows seamless switching between dark and light modes across the entire application with automatic saving via local storage.",
+    ],
+    frameworks: ["NextJs", "Flask"],
+    languages: ["Typescript", "Python"],
+    githubLink: "https://github.com/Jeydeee04/Kanban-Board",
+  }
 ];
 
 export default function Projects() {
