@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-bebas: var(--font-bebas), "Bebas Neue", sans-serif;
+  --font-poppins: var(--font-poppins), "Poppins", sans-serif;
+  --font-rubik: var(--font-rubik), sans-serif;
+}
