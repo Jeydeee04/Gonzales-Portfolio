@@ -37,7 +37,7 @@ export default function ContactPage() {
   return (
     <section
       id="contact"
-      className="flex min-h-screen w-full items-center justify-center bg-zinc-50/50 p-5 sm:p-12 lg:p-16"
+      className="flex min-h-screen w-full items-center justify-center p-5 sm:p-12 lg:p-16"
     >
       <ScrollReveal className="grid w-full max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
         {/* LEFT COLUMN: Contact Information & Branding */}
