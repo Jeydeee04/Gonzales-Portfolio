@@ -2,11 +2,12 @@
 import { FaFacebook, FaGithub } from "react-icons/fa";
 import ProfileImage from "../profileImage";
 import { motion } from "framer-motion";
+import ScrollReveal from "../scrollReveal";
 
 export default function HomePage(){
     return(
-        <section id="" className="h-screen flex">
-            <div className="flex flex-1 flex-col items-center justify-center gap-6 py-12">
+        <section id="" className="flex min-h-[calc(100vh-5rem)] flex-col gap-10 px-6 py-16 md:min-h-screen md:flex-row md:gap-8 md:px-12 md:py-12">
+            <ScrollReveal className="flex flex-1 flex-col items-center justify-center gap-6">
             <ProfileImage />
             <div className="flex flex-col items-center justify-center text-center font-bebas">
                 <h1 className="bg-linear-to-r from-slate-800 via-slate-950 to-slate-700 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent sm:text-4xl">
@@ -16,9 +17,9 @@ export default function HomePage(){
                 Software Developer
                 </p>
             </div>
-            </div>
-            <div className="flex flex-col flex-2 justify-center gap-5">
-                <p className="text-2xl text-gray-500">
+            </ScrollReveal>
+            <ScrollReveal className="flex flex-1 flex-col justify-center gap-5" delay={0.1}>
+                <p className="max-w-xl text-xl leading-relaxed text-gray-500 sm:text-2xl">
                     Programmer by craft, technologist by obsession. 
                     I break down problems like game mechanics, find the pattern, 
                     optimize the build, unlock the next skill.
@@ -50,7 +51,7 @@ export default function HomePage(){
                         <FaFacebook />
                     </motion.a>
                 </div>
-            </div>
+            </ScrollReveal>
         </section>
     )
 }

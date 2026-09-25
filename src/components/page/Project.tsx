@@ -1,85 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import ProjectCard from "../projectCard"
-import { projects } from "@/data"
-import { MdOutlineNavigateNext, MdOutlineNavigateBefore } from "react-icons/md";
+import { useState, useEffect } from "react";
+import ProjectCard from "../projectCard";
+import { projects } from "@/data";
+import { motion, AnimatePresence } from "framer-motion";
+import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
+import ScrollReveal from "../scrollReveal";
 
-export default function ProjectPage(){
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 1;
+export default function ProjectPage() {
+  const [currentPage, setCurrentPage] = useState(0);
+  const totalProjects = projects.length;
 
-    const totalPages = Math.ceil(projects.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentProjects = projects.slice(startIndex, startIndex + itemsPerPage);
+  const handleNext = () => {
+    setCurrentPage((prev) => (prev + 1) % totalProjects);
+  };
 
-    const goToNextPage = () => {
-        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const handlePrev = () => {
+    setCurrentPage((prev) => (prev - 1 + totalProjects) % totalProjects);
+  };
+
+  // Optional: Enable left/right keyboard arrow navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") handlePrev();
+      if (e.key === "ArrowRight") handleNext();
     };
 
-    const goToPrevPage = () => {
-        setCurrentPage((prev) => Math.max(prev - 1, 1));
-    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
-    return(
-        <section 
-            id="projects" 
-            className="h-screen flex flex-col justify-center items-center gap-20 py-20"
-        >
-            {currentProjects.map((proj, i) => (
-                <div 
-                    key={i}
-                    className="h-screen"
-                >
-                    <ProjectCard
-                        images={proj.images}
-                        title={proj.title}
-                        desc={proj.desc}
-                        features={proj.features}
-                        frameworks={proj.frameworks}
-                        languages={proj.languages}
-                        link={proj.link}
-                    />
-                </div>
+  return (
+    <section
+      id="projects"
+      className="relative flex min-h-screen flex-col items-center justify-center px-4 py-16 sm:py-24"
+    >
+      {/* Animated Container for Smooth Page Transitions */}
+      <ScrollReveal className="flex w-full max-w-5xl flex-col items-center gap-6">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPage}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="w-full"
+          >
+            <ProjectCard {...projects[currentPage]} />
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Pagination Bar */}
+        <div className="flex items-center gap-4 bg-white/80 backdrop-blur-md px-5 py-2.5 rounded-full border border-zinc-200/80 shadow-sm">
+          {/* Previous Button */}
+          <button
+            onClick={handlePrev}
+            aria-label="Previous project"
+            className="p-1.5 rounded-full text-zinc-700 hover:text-black hover:bg-zinc-100 transition-colors disabled:opacity-40"
+          >
+            <MdOutlineNavigateBefore className="text-2xl" />
+          </button>
+
+          {/* Page Indicators (Dots) */}
+          <div className="flex items-center gap-2">
+            {projects.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentPage(index)}
+                aria-label={`Go to project ${index + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  currentPage === index
+                    ? "w-6 bg-zinc-900"
+                    : "w-2 bg-zinc-300 hover:bg-zinc-400"
+                }`}
+              />
             ))}
+          </div>
 
-            <div className="flex gap-5">
-                <button
-                    onClick={goToPrevPage}
-                    disabled={currentPage === 1}
-                    className="text-4xl cursor-pointer"
-                    >
-                    <MdOutlineNavigateBefore />
-                </button>
-
-                <div className="flex items-center gap-3">
-                    {Array.from({ length: totalPages }).map((_, index) => {
-                    const pageNumber = index + 1;
-                    const isActive = currentPage === pageNumber;
-
-                    return (
-                        <button
-                        key={pageNumber}
-                        onClick={() => setCurrentPage(pageNumber)}
-                        aria-label={`Go to page ${pageNumber}`}
-                        className={`h-5 rounded-full transition-all border-2 duration-300 ${
-                            isActive
-                            ? "w-15 bg-white border-black"
-                            : "w-5 bg-gray-200 hover:bg-gray-400 border-gray-200"
-                        }`}
-                        />
-                    );
-                    })}
-                </div>
-
-                <button
-                    onClick={goToNextPage}
-                    disabled={currentPage === totalPages}
-                    className="text-4xl cursor-pointer"
-                    >
-                    <MdOutlineNavigateNext />
-                </button>
-            </div>
-        </section>
-    )
+          {/* Next Button */}
+          <button
+            onClick={handleNext}
+            aria-label="Next project"
+            className="p-1.5 rounded-full text-zinc-700 hover:text-black hover:bg-zinc-100 transition-colors"
+          >
+            <MdOutlineNavigateNext className="text-2xl" />
+          </button>
+        </div>
+      </ScrollReveal>
+    </section>
+  );
 }

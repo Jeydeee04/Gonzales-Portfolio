@@ -1,3 +1,5 @@
+import ScrollReveal from "../scrollReveal";
+
 export default function AboutPage() {
   const contentItems = [
     {
@@ -17,11 +19,11 @@ export default function AboutPage() {
   return (
     <section
       id="about"
-      className="h-screen flex flex-col justify-center items-center"
+      className="flex min-h-screen flex-col items-center px-6 py-24 md:pt-40"
     >
-      <div className="w-full max-w-6xl flex flex-col gap-12">
+      <div className="flex w-full max-w-6xl flex-col gap-12">
         {contentItems.map((item, i) => (
-          <div key={i} className="group flex flex-col gap-3">
+          <ScrollReveal key={i} delay={i * 0.08} className="group flex flex-col gap-3">
             <div className="flex items-center gap-3 cursor-pointer">
               <div className="h-0.5 w-8 bg-slate-300 transition-all duration-300 ease-out group-hover:w-14 group-hover:bg-gray-500" />
               <h2 className="font-bebas text-3xl sm:text-4xl font-bold uppercase tracking-wide text-gray-600 transition-colors duration-300 group-hover:text-black">
@@ -32,7 +34,7 @@ export default function AboutPage() {
             <p className="text-base sm:text-lg text-gray-600 font-normal leading-relaxed pl-11">
               {item.content}
             </p>
-          </div>
+          </ScrollReveal>
         ))}
       </div>
     </section>
