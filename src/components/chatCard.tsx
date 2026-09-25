@@ -17,12 +17,17 @@ export default function ChatCard() {
   ]);
   const [input, setInput] = useState("");
 
-  // 1. Create a reference for the bottom element of the chat
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  // Ref attached directly to the scrollable message container
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // 2. Scroll to the bottom whenever the messages array updates
+  // Scroll ONLY the inner container to the bottom
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   };
 
   useEffect(() => {
@@ -70,8 +75,11 @@ export default function ChatCard() {
           </div>
         </div>
 
-        {/* Message Log */}
-        <div className="p-4 h-64 overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-zinc-200">
+        {/* Message Log — ref attached directly to this container */}
+        <div
+          ref={messagesContainerRef}
+          className="p-4 h-64 overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-zinc-200"
+        >
           {messages.map((msg, idx) => (
             <motion.div
               key={idx}
@@ -101,8 +109,6 @@ export default function ChatCard() {
               </div>
             </motion.div>
           ))}
-          {/* 3. Invisible dummy div to anchor auto-scroll */}
-          <div ref={messagesEndRef} />
         </div>
 
         {/* Input Bar */}
