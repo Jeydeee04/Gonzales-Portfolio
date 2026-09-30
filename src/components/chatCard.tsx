@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { FiSend, FiUser } from "react-icons/fi";
 import { FaRobot } from "react-icons/fa6";
 import { TbSparkles } from "react-icons/tb";
-import { getBotReplyWithPercentage } from "@/utils/getBotReply";
+import { answerQuery, getTextEmbedder } from "@/utils/textEmbedder";
 import { Message } from "@/models/message";
 
 export default function ChatCard() {
@@ -16,6 +16,7 @@ export default function ChatCard() {
     },
   ]);
   const [input, setInput] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
 
   // Ref attached directly to the scrollable message container
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -32,30 +33,33 @@ export default function ChatCard() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isThinking]);
 
-  const handleSend = (e: React.FormEvent) => {
+  // Warm up the MediaPipe Text Embedder (WASM runtime + model) as soon as the
+  // card mounts, so the first message doesn't stall on the asset download.
+  // Failures are handled per-message inside answerQuery.
+  useEffect(() => {
+    getTextEmbedder().catch(() => {});
+  }, []);
+
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    const userQuery = input.trim();
+    if (!userQuery || isThinking) return;
 
-    const userQuery = input;
     setInput("");
 
     // Append user message
     setMessages((prev) => [...prev, { sender: "user", text: userQuery }]);
 
-    // Fetch and append bot reply
-    const matchResult = getBotReplyWithPercentage(userQuery);
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "bot",
-          text: matchResult.response,
-          matchInfo: matchResult,
-        },
-      ]);
-    }, 400);
+    // Show the thinking indicator while the embedder matches a reply
+    setIsThinking(true);
+    try {
+      const response = await answerQuery(userQuery);
+      setMessages((prev) => [...prev, { sender: "bot", text: response }]);
+    } finally {
+      setIsThinking(false);
+    }
   };
 
   return (
@@ -109,6 +113,29 @@ export default function ChatCard() {
               </div>
             </motion.div>
           ))}
+          {/* Thinking indicator while the embedder runs */}
+          {isThinking && (
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex gap-2.5"
+              role="status"
+              aria-label="Assistant is thinking"
+            >
+              <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-mono bg-zinc-100 border border-zinc-200 text-zinc-700">
+                <FaRobot />
+              </div>
+              <div className="max-w-[80%] text-xs leading-relaxed p-3 rounded-2xl font-medium bg-zinc-100/80 border border-zinc-200/60 text-zinc-800 rounded-tl-none flex items-center gap-1.5">
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    className="w-1.5 h-1.5 rounded-full bg-zinc-400 animate-pulse"
+                    style={{ animationDelay: `${i * 150}ms` }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Input Bar */}
@@ -125,7 +152,8 @@ export default function ChatCard() {
           />
           <button
             type="submit"
-            className="p-2.5 bg-black hover:bg-zinc-800 text-white rounded-xl transition-colors shrink-0"
+            disabled={isThinking}
+            className="p-2.5 bg-black hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl transition-colors shrink-0"
             aria-label="Send Message"
           >
             <FiSend className="text-sm" />
