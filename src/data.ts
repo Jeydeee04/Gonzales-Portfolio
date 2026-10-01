@@ -38,6 +38,19 @@ export const projects = [
         frameworks: ["NextJs", "Flask"],
         languages: ["Typescript", "Python"],
         link: "https://github.com/Jeydeee04/Kanban-Board",
+    },
+    {
+        images: ["aircanvas (1).jpg", "aircanvas (2).jpg", "aircanvas (3).jpg"],
+        title: "Air Canvas",
+        features: [
+        "Immersive drawing surface framed with floating vellum overlay panels.",
+        "High-performance engine supporting distinct tools (Pen, Marker, Eraser), state history (Undo / Redo), and high-res PNG Export.",
+        "Natural gesture controls, including Pinch-to-Draw, Victory-Sign (cycle tools), and Open Palm (pause/hover).",
+        "Fixed mirror mapping to ensure on-screen hand movement perfectly tracks and matches the live Picture-in-Picture (PiP) video preview."
+        ],
+        frameworks: ["NextJs", "Mediapipe"],
+        languages: ["Typescript"],
+        link: "https://github.com/Jeydeee04/AirCanvas",
     }
 ]
 
